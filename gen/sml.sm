@@ -1,0 +1,29 @@
+%class MyStateMachine
+%start MainMap::State1
+
+%map MainMap
+%%
+
+State1b {
+}
+
+State1c {
+}
+
+State2a {
+}
+
+State2c {
+}
+
+State3a {
+}
+
+State3b {
+}
+
+State3c {
+}
+
+%%
+
