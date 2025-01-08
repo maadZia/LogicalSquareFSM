@@ -13,6 +13,8 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.parent_id = 0
         self.expanded_states = []
         self.class_code = None
+        self.transition_code = None
+        self.qt_code = None
 
         self.ui.inputA.returnPressed.connect(lambda: self.move_focus(self.ui.inputE))
         self.ui.inputE.returnPressed.connect(lambda: self.move_focus(self.ui.inputI))
@@ -149,23 +151,34 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.smcode.clear()
 
         if sender == self.ui.genButton_1:
-            tree_str = self.fsm.display_tree()
-            self.ui.smcode.append(tree_str)
-
-            self.ui.smcode.append("\nTransitions:")
-            for state_id, node in self.fsm.span_tree.items():
-                transitions_for_state = self.fsm.state_transitions_map.get(state_id, {})
-                if transitions_for_state:
-                    for event, to_state in transitions_for_state.items():
-                        self.ui.smcode.append(f"State{state_id}  ->  State{to_state}  on event  '{event}'")
-
-        elif sender == self.ui.genButton_2:
+            # tree_str = self.fsm.display_tree()
+            # self.ui.smcode.append(tree_str)
+            #
+            # self.ui.smcode.append("\nTransitions:")
+            # for state_id, node in self.fsm.span_tree.items():
+            #     transitions_for_state = self.fsm.state_transitions_map.get(state_id, {})
+            #     if transitions_for_state:
+            #         for event, to_state in transitions_for_state.items():
+            #             self.ui.smcode.append(f"State{state_id}  ->  State{to_state}  on event  '{event}'")
             if self.class_code is None:
                 self.class_code = self.fsm.generate_class_code()
-                with open("gen/state_machine.py", "w") as f:
+                with open("gen/state_machine_1.py", "w") as f:
                     f.write(self.class_code)
             self.ui.smcode.append(self.class_code)
-            # self.fsm.export_to_dot()
+
+        elif sender == self.ui.genButton_2:
+            if self.transition_code is None:
+                self.transition_code = self.fsm.generate_code_3()
+                with open("gen/state_machine_2.py", "w") as f:
+                    f.write(self.transition_code)
+            self.ui.smcode.append(self.transition_code)
+
+        elif sender == self.ui.genButton_3:
+            if self.qt_code is None:
+                self.qt_code = self.fsm.generate_code_3_qt()
+                with open("gen/state_machine_3.py", "w") as f:
+                    f.write(self.qt_code)
+            self.ui.smcode.append(self.qt_code)
 
     def reset_action(self):
         self.close()

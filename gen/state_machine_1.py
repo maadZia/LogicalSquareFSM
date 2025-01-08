@@ -6,15 +6,15 @@ class State:
 class State1a(State):
     def handle_event(self, context):
         # Assertion logic
-        print('State1a: handling event (a and i)')
+        print('State1a: Namefor1a: handling event (a and c)')
 
         # Transition logic
         event = context.event
-        if event == 'c1':
+        if event == 'cond1':
             print('Transitioning to State1b')
             context.set_state(State1b())
             return
-        if event == 'c2':
+        if event == 'cond2':
             print('Transitioning to State2a')
             context.set_state(State2a())
             return
@@ -24,7 +24,7 @@ class State1a(State):
 class State1b(State):
     def handle_event(self, context):
         # Assertion logic
-        print('State1b: handling event (i and o)')
+        print('State1b: Anothername: handling event (c and d)')
 
         print('No transitions defined for State1b')
 
@@ -32,35 +32,43 @@ class State1b(State):
 class State2a(State):
     def handle_event(self, context):
         # Assertion logic
-        print('State2a: handling event (ii and oo)')
-
-        print('No transitions defined for State2a')
-
-
-class State2b(State):
-    def handle_event(self, context):
-        # Assertion logic
-        print('State2b: handling event (oo and ee)')
+        print('State2a: handling event (a and w)')
 
         # Transition logic
         event = context.event
-        if event == 'c3':
+        if event == 'codn3':
             print('Transitioning to State1b')
             context.set_state(State1b())
             return
         print('No valid transition for event')
 
 
+class State2b(State):
+    def handle_event(self, context):
+        # Assertion logic
+        print('State2b: handling event (w and e)')
+
+        print('No transitions defined for State2b')
+
+
+class State2c(State):
+    def handle_event(self, context):
+        # Assertion logic
+        print('State2c: handling event (e and q)')
+
+        print('No transitions defined for State2c')
+
+
 class StateMachineContext:
     def __init__(self):
         # Attributes
         self.a = False
+        self.b = False
+        self.c = False
+        self.d = False
+        self.q = False
+        self.w = False
         self.e = False
-        self.i = False
-        self.o = False
-        self.ee = False
-        self.ii = False
-        self.oo = False
         self.event = None
 
         # Initial state

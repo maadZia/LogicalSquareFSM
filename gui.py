@@ -177,15 +177,15 @@ class Ui_MainWindow(object):
 
         self.genButton_1 = QtWidgets.QPushButton(self.smwidget)
         self.genButton_1.setGeometry(QtCore.QRect(620, 140, 141, 31))
-        self.genButton_1.setText("State tree")
+        self.genButton_1.setText("Class code")
 
         self.genButton_2 = QtWidgets.QPushButton(self.smwidget)
         self.genButton_2.setGeometry(QtCore.QRect(620, 190, 141, 31))
-        self.genButton_2.setText("Class code")
+        self.genButton_2.setText("Transition code")
 
         self.genButton_3 = QtWidgets.QPushButton(self.smwidget)
         self.genButton_3.setGeometry(QtCore.QRect(790, 140, 131, 31))
-        self.genButton_3.setText("???")
+        self.genButton_3.setText("Qt code")
 
         self.genButton_4 = QtWidgets.QPushButton(self.smwidget)
         self.genButton_4.setGeometry(QtCore.QRect(790, 190, 131, 31))
