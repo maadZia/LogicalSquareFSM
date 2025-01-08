@@ -2,8 +2,9 @@ from components.state import State
 from string import ascii_lowercase
 from components.code_generator import (
     generate_class_code,
-    generate_code_3,
-    generate_code_3_qt,
+    generate_sml,
+    generate_transition_code,
+    generate_qt_code,
     generate_assertion_code,
 )
 
@@ -154,8 +155,11 @@ class LogicalSquareFSM:
     def generate_assertion_code(self, assertion):
         return generate_assertion_code(assertion)
 
-    def generate_code_3(self):
-        return generate_code_3(self)
+    def generate_sml(self):
+        return generate_sml(self)
 
-    def generate_code_3_qt(self):
-        return generate_code_3_qt(self)
+    def generate_transition_code(self):
+        return generate_transition_code(self)
+
+    def generate_qt_code(self):
+        return generate_qt_code(self)

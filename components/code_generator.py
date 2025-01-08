@@ -1,3 +1,5 @@
+import subprocess
+
 from graphviz import Source
 import re
 
@@ -120,7 +122,47 @@ def generate_assertion_code(assertion):
     return " ".join(processed_tokens)
 
 
-def generate_code_3(fsm):
+def generate_sml(self):
+    sml_code = ""
+    sml_code += "%class MyStateMachine\n"
+    sml_code += "%start MainMap::State1\n\n"
+    sml_code += "%map MainMap\n"
+    sml_code += "%%\n\n"
+    for state_id, node in self.span_tree.items():
+        if state_id != 0 and not node['children']:
+            sml_code += f"State{state_id} {{\n"
+            for from_state, to_state, event in self.transitions:
+                if int(from_state) == int(state_id):
+                    sml_code += f"    {event} State{to_state} {{}}\n"
+            sml_code += "}\n\n"
+    sml_code += "%%\n\n"
+
+    with open("gen/sml.sm", "w") as file:
+        file.write(sml_code)
+
+    compile_sml_to_python()
+    # return sml_code
+
+
+def compile_sml_to_python():
+    try:
+        command = [
+            "java", "-jar", "smc.jar",
+            "-python", "gen/sml.sm"
+        ]
+
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        if result.returncode == 0:
+            print("Kompilacja zakończona sukcesem.")
+        else:
+            print("Błąd podczas kompilacji:")
+            print(result.stderr)
+    except Exception as e:
+        print(f"Wystąpił błąd: {e}")
+
+
+def generate_transition_code(fsm):
     states = []
     for state_id, node in fsm.span_tree.items():
         if not node["children"]:
@@ -134,22 +176,25 @@ def generate_code_3(fsm):
     for from_state, to_state, event in fsm.transitions:
         code += f"    {{'trigger': '{event}', 'source': '{from_state}', 'dest': '{to_state}'}}, \n"
 
+    initial_id = fsm.get_initial_state()
     code += "]\n\n"
-    code += "machine = Machine(states=states, transitions=transitions, initial='{}')\n".format(
+    code += f"machine = Machine(states=states, transitions=transitions, initial='State{initial_id}')\n".format(
         fsm.span_tree[fsm.root].get('state'))
 
     return code
 
 
-def generate_code_3_qt(fsm):
+def generate_qt_code(fsm):
     code = "from PyQt5.QtCore import QState, QStateMachine\n\n"
     code += "machine = QStateMachine()\n\n"
 
-    state_objects = {f'{state_id}': f"State{state_id}" for state_id, node in fsm.span_tree.items() if
-                     state_id != 0}
-    for state, obj_name in state_objects.items():
-        code += f"{obj_name} = QState()\n"
-        code += f"machine.addState({obj_name})\n"
+    state_objects = {}
+    for state_id, node in fsm.span_tree.items():
+        if state_id != 0 and not node['children']:
+            obj_name = f"State{state_id}"
+            state_objects[state_id] = obj_name
+            code += f"{obj_name} = QState()\n"
+            code += f"machine.addState({obj_name})\n"
 
     code += "\n# Define transitions\n"
     for from_state, to_state, event in fsm.transitions:

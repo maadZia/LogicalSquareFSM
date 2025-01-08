@@ -15,6 +15,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.class_code = None
         self.transition_code = None
         self.qt_code = None
+        self.sml_code = None
 
         self.ui.inputA.returnPressed.connect(lambda: self.move_focus(self.ui.inputE))
         self.ui.inputE.returnPressed.connect(lambda: self.move_focus(self.ui.inputI))
@@ -141,6 +142,8 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.genwidget.hide()
         self.ui.smwidget.show()
 
+        self.fsm.generate_sml()
+
     def show_sm_code(self):
         sender = self.sender()
 
@@ -162,23 +165,30 @@ class MainWindowController(QtWidgets.QMainWindow):
             #             self.ui.smcode.append(f"State{state_id}  ->  State{to_state}  on event  '{event}'")
             if self.class_code is None:
                 self.class_code = self.fsm.generate_class_code()
-                with open("gen/state_machine_1.py", "w") as f:
+                with open("gen/sm_class_code.py", "w") as f:
                     f.write(self.class_code)
             self.ui.smcode.append(self.class_code)
 
         elif sender == self.ui.genButton_2:
             if self.transition_code is None:
-                self.transition_code = self.fsm.generate_code_3()
-                with open("gen/state_machine_2.py", "w") as f:
+                self.transition_code = self.fsm.generate_transition_code()
+                with open("gen/sm_transitions.py", "w") as f:
                     f.write(self.transition_code)
             self.ui.smcode.append(self.transition_code)
 
         elif sender == self.ui.genButton_3:
             if self.qt_code is None:
-                self.qt_code = self.fsm.generate_code_3_qt()
-                with open("gen/state_machine_3.py", "w") as f:
+                self.qt_code = self.fsm.generate_qt_code()
+                with open("gen/sm_qt.py", "w") as f:
                     f.write(self.qt_code)
             self.ui.smcode.append(self.qt_code)
+
+        elif sender == self.ui.genButton_4:
+            if self.sml_code is None:
+                with open("gen/sml_sm.py", 'r') as file:
+                    code = file.read()
+                    self.sml_code = code
+            self.ui.smcode.append(self.sml_code)
 
     def reset_action(self):
         self.close()

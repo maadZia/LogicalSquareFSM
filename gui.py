@@ -189,7 +189,7 @@ class Ui_MainWindow(object):
 
         self.genButton_4 = QtWidgets.QPushButton(self.smwidget)
         self.genButton_4.setGeometry(QtCore.QRect(790, 190, 131, 31))
-        self.genButton_4.setText("???")
+        self.genButton_4.setText("SML code")
 
         self.genwidget = QtWidgets.QWidget(self.centralwidget)
         self.genwidget.setGeometry(QtCore.QRect(569, 19, 471, 671))
