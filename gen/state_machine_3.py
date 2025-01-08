@@ -18,7 +18,7 @@ machine.addState(State2c)
 # Define transitions
 State1a.addTransition(State1b)
 State1a.addTransition(State2a)
-State2a.addTransition(State1b)
+State2c.addTransition(State2a)
 
 # Set initial state
 machine.setInitialState(State1a)

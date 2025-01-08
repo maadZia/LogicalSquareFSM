@@ -6,7 +6,7 @@ class State:
 class State1a(State):
     def handle_event(self, context):
         # Assertion logic
-        print('State1a: Namefor1a: handling event (a and c)')
+        print('State1a: Name1: handling event (a and c)')
 
         # Transition logic
         event = context.event
@@ -24,7 +24,7 @@ class State1a(State):
 class State1b(State):
     def handle_event(self, context):
         # Assertion logic
-        print('State1b: Anothername: handling event (c and d)')
+        print('State1b: Name2: handling event (c and d)')
 
         print('No transitions defined for State1b')
 
@@ -32,15 +32,9 @@ class State1b(State):
 class State2a(State):
     def handle_event(self, context):
         # Assertion logic
-        print('State2a: handling event (a and w)')
+        print('State2a: Name3: handling event (a and w)')
 
-        # Transition logic
-        event = context.event
-        if event == 'codn3':
-            print('Transitioning to State1b')
-            context.set_state(State1b())
-            return
-        print('No valid transition for event')
+        print('No transitions defined for State2a')
 
 
 class State2b(State):
@@ -56,7 +50,13 @@ class State2c(State):
         # Assertion logic
         print('State2c: handling event (e and q)')
 
-        print('No transitions defined for State2c')
+        # Transition logic
+        event = context.event
+        if event == 'cond3':
+            print('Transitioning to State2a')
+            context.set_state(State2a())
+            return
+        print('No valid transition for event')
 
 
 class StateMachineContext:

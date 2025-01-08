@@ -1,6 +1,6 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
 from gui import Ui_MainWindow
-from fsm import LogicalSquareFSM
+from components.fsm import LogicalSquareFSM
 
 
 class MainWindowController(QtWidgets.QMainWindow):
