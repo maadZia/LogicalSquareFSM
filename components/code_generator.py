@@ -122,17 +122,18 @@ def generate_assertion_code(assertion):
     return " ".join(processed_tokens)
 
 
-def generate_sml(self):
+def generate_sml(fsm):
+    initial_id = fsm.get_initial_state()
     sml_code = ""
     sml_code += "%class MyStateMachine\n"
-    sml_code += "%start MainMap::State1\n\n"
+    sml_code += f"%start MainMap::State{initial_id}\n\n"
     sml_code += "%map MainMap\n"
     sml_code += "%%\n\n"
-    for state_id, node in self.span_tree.items():
+    for state_id, node in fsm.span_tree.items():
         if state_id != 0 and not node['children']:
             sml_code += f"State{state_id} {{\n"
-            for from_state, to_state, event in self.transitions:
-                if int(from_state) == int(state_id):
+            for from_state, to_state, event in fsm.transitions:
+                if from_state == state_id:
                     sml_code += f"    {event} State{to_state} {{}}\n"
             sml_code += "}\n\n"
     sml_code += "%%\n\n"

@@ -3,6 +3,7 @@ from string import ascii_lowercase
 from components.code_generator import (
     generate_class_code,
     generate_sml,
+    compile_sml_to_python,
     generate_transition_code,
     generate_qt_code,
     generate_assertion_code,
@@ -157,6 +158,9 @@ class LogicalSquareFSM:
 
     def generate_sml(self):
         return generate_sml(self)
+
+    # def compile_sml_to_python(self, code):
+    #     return compile_sml_to_python(self, code)
 
     def generate_transition_code(self):
         return generate_transition_code(self)

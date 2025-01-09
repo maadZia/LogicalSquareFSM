@@ -142,8 +142,6 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.genwidget.hide()
         self.ui.smwidget.show()
 
-        self.fsm.generate_sml()
-
     def show_sm_code(self):
         sender = self.sender()
 
@@ -185,6 +183,7 @@ class MainWindowController(QtWidgets.QMainWindow):
 
         elif sender == self.ui.genButton_4:
             if self.sml_code is None:
+                self.fsm.generate_sml()
                 with open("gen/sml_sm.py", 'r') as file:
                     code = file.read()
                     self.sml_code = code
