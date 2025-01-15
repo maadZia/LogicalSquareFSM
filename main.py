@@ -125,7 +125,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         existing_transitions = self.fsm.state_transitions_map.get(current_state, {}).values()
 
         available_states = [state for state in all_states
-                            if state not in existing_transitions and state != current_state]
+                            if state not in existing_transitions]
 
         self.ui.tobox.clear()
         for state in available_states:
