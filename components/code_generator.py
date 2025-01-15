@@ -3,6 +3,7 @@ import subprocess
 from graphviz import Source
 import re
 
+
 def generate_class_code(fsm):
     """
     Generuje kod klasy maszyny stanowej z dynamicznymi klasami dla aktualnych nierozwiniętych stanów.

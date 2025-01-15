@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from pyqtgraph import GraphicsLayoutWidget
 
 
 class Ui_MainWindow(object):
@@ -10,6 +11,7 @@ class Ui_MainWindow(object):
         MainWindow.setFont(font)
 
         font_16 = QtGui.QFont("Arial Black", 16)
+        font_14 = QtGui.QFont("Arial Black", 14)
         font_12 = QtGui.QFont("Arial Black", 12)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -116,7 +118,7 @@ class Ui_MainWindow(object):
 
         self.translabel = QtWidgets.QLabel(self.transwidget)
         self.translabel.setGeometry(QtCore.QRect(0, 0, 531, 81))
-        self.translabel.setFont(font_16)
+        self.translabel.setFont(font_14)
         self.translabel.setAlignment(QtCore.Qt.AlignCenter)
         self.translabel.setText("Add transitions between states")
 
@@ -200,9 +202,18 @@ class Ui_MainWindow(object):
         self.stlabel.setAlignment(QtCore.Qt.AlignCenter)
         self.stlabel.setText("State tree")
 
-        self.statetree = QtWidgets.QTextEdit(self.genwidget)
+        # self.statetree = QtWidgets.QTextEdit(self.genwidget)
+        # self.statetree.setGeometry(QtCore.QRect(0, 50, 471, 281))
+        # self.statetree.setReadOnly(True)
+        self.statetree = GraphicsLayoutWidget(self.genwidget)
         self.statetree.setGeometry(QtCore.QRect(0, 50, 471, 281))
-        self.statetree.setReadOnly(True)
+        self.statetree.setBackground('w')  # Ustawienie białego tła
+        self.statetree.setStyleSheet("""
+            border: 1px solid black;  /* Cienka czarna ramka */
+        """)
+        self.graph_plot = self.statetree.addPlot()
+        self.graph_plot.hideAxis('left')  # Ukrycie osi pionowej
+        self.graph_plot.hideAxis('bottom')
 
         self.stlabel_2 = QtWidgets.QLabel(self.genwidget)
         self.stlabel_2.setGeometry(QtCore.QRect(0, 340, 471, 51))

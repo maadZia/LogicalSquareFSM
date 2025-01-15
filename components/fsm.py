@@ -1,5 +1,6 @@
 from components.state import State
 from string import ascii_lowercase
+import networkx as nx
 from components.code_generator import (
     generate_class_code,
     generate_sml,
@@ -100,6 +101,18 @@ class LogicalSquareFSM:
         else:
             print(f"Błąd: Nie znaleziono stanu o ID {state_id}.")
 
+    def get_state_names(self):
+        """
+        Zwraca słownik z nazwami stanów.
+        Klucz: ID stanu, Wartość: Nazwa stanu (lub None, jeśli brak nazwy).
+        """
+        state_names = {}
+        for state_id, node_data in self.span_tree.items():
+            state = node_data.get("state")
+            if isinstance(state, State) and hasattr(state, "name") and state.name:
+                state_names[state_id] = state.name
+        return state_names
+
     def add_square(self, a, e, i, o, parent_id=0):
         """
         Dodaje nowy kwadrat logiczny, rozwijając wybrany stan.
@@ -119,19 +132,29 @@ class LogicalSquareFSM:
         # Aktualizuje listę najnowszych stanów
         self.latest_states = [s.state_id for s in new_states]
 
-    def display_tree(self, node_id=None, level=0, tree_list=None):
-        """
-        Zwraca drzewo stanów jako listę zagnieżdżonych stringów.
-        """
-        if node_id is None:
-            node_id = self.root
+    # def display_tree(self, node_id=None, level=0, tree_list=None):
+    #     """
+    #     Zwraca drzewo stanów jako listę zagnieżdżonych stringów.
+    #     """
+    #     if node_id is None:
+    #         node_id = self.root
+    #
+    #     node = self.span_tree[node_id]["state"]
+    #     tree_str = " " * (2 * level) + str(node) + "\n"  # Dodajemy nową linię po każdym stanie
+    #     for child_id in self.span_tree[node_id]["children"]:
+    #         tree_str += self.display_tree(child_id, level + 1)
+    #
+    #     return tree_str
 
-        node = self.span_tree[node_id]["state"]
-        tree_str = " " * (2 * level) + str(node) + "\n"  # Dodajemy nową linię po każdym stanie
-        for child_id in self.span_tree[node_id]["children"]:
-            tree_str += self.display_tree(child_id, level + 1)
-
-        return tree_str
+    def get_tree_edges(self):
+        """
+        Eksportuje strukturę drzewa jako listę krawędzi.
+        """
+        edges = []
+        for node_id, node_data in self.span_tree.items():
+            for child_id in node_data["children"]:
+                edges.append((node_id, child_id))
+        return edges
 
     def add_transition(self, from_state, to_state, event):
         """

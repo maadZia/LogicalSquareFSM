@@ -1,11 +1,10 @@
 %class MyStateMachine
-%start MainMap::State1a
+%start MainMap::State1b
 
 %map MainMap
 %%
 
-State1a {
-    cond1 State1c {}
+State1b {
 }
 
 State1c {
@@ -15,7 +14,6 @@ State2a {
 }
 
 State2b {
-    cond2 State1c {}
 }
 
 State2c {

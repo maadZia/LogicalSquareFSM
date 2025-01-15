@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 from gui import Ui_MainWindow
 from components.fsm import LogicalSquareFSM
+from components import state_tree_gen as stg
 
 
 class MainWindowController(QtWidgets.QMainWindow):
@@ -42,9 +43,16 @@ class MainWindowController(QtWidgets.QMainWindow):
 
         self.ui.resetButton.clicked.connect(self.reset_action)
 
-
     def move_focus(self, next_widget):
         next_widget.setFocus()
+
+    def display_tree_graph(self):
+        """
+        Rysuje drzewo stanów w widżecie PyQtGraph.
+        """
+        edges = self.fsm.get_tree_edges()
+        node_names = self.fsm.get_state_names()  # Pobranie nazw stanów
+        stg.draw_tree(self.ui.graph_plot, edges, node_names=node_names)  # Przekazanie nazw do funkcji rysującej
 
     def add_square(self):
         a = self.ui.inputA.text() or "true"
@@ -56,10 +64,11 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.expanded_states.append(self.parent_id)
 
         if len(self.fsm.latest_states) > 0:
-            self.ui.statetree.clear()
-            tree_str = self.fsm.display_tree()
+            # self.ui.statetree.clear()
+            # tree_str = self.fsm.display_tree()
 
-            self.ui.statetree.append(tree_str)
+            # self.ui.statetree.append(tree_str)
+            self.display_tree_graph()
 
             self.ui.inputA.clear()
             self.ui.inputE.clear()
@@ -82,9 +91,10 @@ class MainWindowController(QtWidgets.QMainWindow):
         state_name = self.ui.nameinput.text()
         self.fsm.assign_name_to_state(state_id, state_name)
         self.ui.nameinput.clear()
-        self.ui.statetree.clear()
-        tree_str = self.fsm.display_tree()
-        self.ui.statetree.append(tree_str)
+        # self.ui.statetree.clear()
+        self.display_tree_graph()
+        # tree_str = self.fsm.display_tree()
+        # self.ui.statetree.append(tree_str)
 
     def show_state_widget(self):
         self.ui.squarewidget.setEnabled(True)
