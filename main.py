@@ -60,14 +60,26 @@ class MainWindowController(QtWidgets.QMainWindow):
         i = self.ui.inputI.text() or "true"
         o = self.ui.inputO.text() or "true"
 
+        if a == o:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Data error",
+                "Fields 'A' and 'O' cannot have the same value."
+            )
+            return
+
+        if e == i:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Data error",
+                "Fields 'E' and 'I' cannot have the same value."
+            )
+            return
+
         self.fsm.add_square(a, e, i, o, self.parent_id)
         self.expanded_states.append(self.parent_id)
 
         if len(self.fsm.latest_states) > 0:
-            # self.ui.statetree.clear()
-            # tree_str = self.fsm.display_tree()
-
-            # self.ui.statetree.append(tree_str)
             self.display_tree_graph()
 
             self.ui.inputA.clear()
