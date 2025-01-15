@@ -221,9 +221,18 @@ class Ui_MainWindow(object):
         self.stlabel_2.setAlignment(QtCore.Qt.AlignCenter)
         self.stlabel_2.setText("Transitions")
 
-        self.transitions = QtWidgets.QTextEdit(self.genwidget)
-        self.transitions.setGeometry(QtCore.QRect(0, 390, 471, 281))
-        self.transitions.setReadOnly(True)
+        # self.transitions = QtWidgets.QTextEdit(self.genwidget)
+        # self.transitions.setGeometry(QtCore.QRect(0, 390, 471, 281))
+        # self.transitions.setReadOnly(True)
+        self.transitions = GraphicsLayoutWidget(self.genwidget)
+        self.transitions.setGeometry(0, 390, 471, 281)
+        self.transitions.setBackground('w')  # Ustawienie białego tła
+        self.transitions.setStyleSheet("""
+            border: 1px solid black;  /* Cienka czarna ramka */
+        """)
+        self.transition_plot = self.transitions.addPlot()
+        self.transition_plot.hideAxis('left')  # Ukrycie osi pionowej
+        self.transition_plot.hideAxis('bottom')
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.retranslateUi(MainWindow)

@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 from gui import Ui_MainWindow
 from components.fsm import LogicalSquareFSM
-from components import state_tree_gen as stg
+from components import graph_gen as gg
 
 
 class MainWindowController(QtWidgets.QMainWindow):
@@ -24,7 +24,6 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.inputO.returnPressed.connect(self.add_square)
 
         self.ui.addButton_1.clicked.connect(self.add_square)
-        # napisac funkcje dodajaca nazwy dla stanow - ma sie aktualizowac state tree od razu po dodaniu kazdej nazwy
         self.ui.nameinput.returnPressed.connect(self.add_name)
         self.ui.nextButton_1.clicked.connect(self.show_state_widget)
 
@@ -51,8 +50,8 @@ class MainWindowController(QtWidgets.QMainWindow):
         Rysuje drzewo stanów w widżecie PyQtGraph.
         """
         edges = self.fsm.get_tree_edges()
-        node_names = self.fsm.get_state_names()  # Pobranie nazw stanów
-        stg.draw_tree(self.ui.graph_plot, edges, node_names=node_names)  # Przekazanie nazw do funkcji rysującej
+        node_names = self.fsm.get_state_names()
+        gg.draw_tree(self.ui.graph_plot, edges, node_names=node_names)
 
     def add_square(self):
         a = self.ui.inputA.text() or "true"
@@ -80,6 +79,10 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.expanded_states.append(self.parent_id)
 
         if len(self.fsm.latest_states) > 0:
+            # self.ui.statetree.clear()
+            # tree_str = self.fsm.display_tree()
+
+            # self.ui.statetree.append(tree_str)
             self.display_tree_graph()
 
             self.ui.inputA.clear()
@@ -137,7 +140,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         existing_transitions = self.fsm.state_transitions_map.get(current_state, {}).values()
 
         available_states = [state for state in all_states
-                            if state not in existing_transitions]
+                            if state not in existing_transitions and state]
 
         self.ui.tobox.clear()
         for state in available_states:
@@ -151,11 +154,14 @@ class MainWindowController(QtWidgets.QMainWindow):
 
         from_state = self.ui.frombox.currentText()
         to_state = self.ui.tobox.currentText()
-        transition_message = self.fsm.add_transition(from_state, to_state, event)
 
-        self.ui.transitions.append(transition_message)
-        self.ui.conditioninput.clear()
-        self.update_state_box()
+        if to_state:
+            self.fsm.add_transition(from_state, to_state, event)
+            transitions = [(t[0], t[1], t[2]) for t in self.fsm.transitions]
+            gg.draw_state_machine(self.ui.transition_plot, transitions)
+
+            self.ui.conditioninput.clear()
+            self.update_state_box()
 
     def show_sm_widget(self):
         self.ui.expandwidget.setEnabled(True)

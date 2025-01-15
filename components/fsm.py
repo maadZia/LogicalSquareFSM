@@ -166,7 +166,7 @@ class LogicalSquareFSM:
             self.state_transitions_map[from_state] = {}
         self.state_transitions_map[from_state][event] = to_state
 
-        return f"State{from_state}  ->  State{to_state}  on event  '{event}'"
+        # return f"State{from_state}  ->  State{to_state}  on event  '{event}'"
 
     def get_initial_state(self):
         initial_states = [state_id for state_id, node in self.span_tree.items() if not node["children"]]
