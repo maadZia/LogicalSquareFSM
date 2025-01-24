@@ -132,19 +132,19 @@ class LogicalSquareFSM:
         # Aktualizuje listę najnowszych stanów
         self.latest_states = [s.state_id for s in new_states]
 
-    # def display_tree(self, node_id=None, level=0, tree_list=None):
-    #     """
-    #     Zwraca drzewo stanów jako listę zagnieżdżonych stringów.
-    #     """
-    #     if node_id is None:
-    #         node_id = self.root
-    #
-    #     node = self.span_tree[node_id]["state"]
-    #     tree_str = " " * (2 * level) + str(node) + "\n"  # Dodajemy nową linię po każdym stanie
-    #     for child_id in self.span_tree[node_id]["children"]:
-    #         tree_str += self.display_tree(child_id, level + 1)
-    #
-    #     return tree_str
+    def display_tree(self, node_id=None, level=0, tree_list=None):
+        """
+        Zwraca drzewo stanów jako listę zagnieżdżonych stringów.
+        """
+        if node_id is None:
+            node_id = self.root
+
+        node = self.span_tree[node_id]["state"]
+        tree_str = " " * (2 * level) + str(node) + "\n"  # Dodajemy nową linię po każdym stanie
+        for child_id in self.span_tree[node_id]["children"]:
+            tree_str += self.display_tree(child_id, level + 1)
+
+        return tree_str
 
     def get_tree_edges(self):
         """
@@ -181,9 +181,6 @@ class LogicalSquareFSM:
 
     def generate_sml(self):
         return generate_sml(self)
-
-    # def compile_sml_to_python(self, code):
-    #     return compile_sml_to_python(self, code)
 
     def generate_transition_code(self):
         return generate_transition_code(self)

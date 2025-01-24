@@ -1,7 +1,8 @@
 from transitions import Machine
 
-states = ['State1b', 'State1c', 'State2a', 'State2b', 'State2c']
+states = ['State1a', 'State1b', 'State1c']
 transitions = [
+    {'trigger': 'cond', 'source': '1a', 'dest': '1b'}, 
 ]
 
-machine = Machine(states=states, transitions=transitions, initial='State1b')
+machine = Machine(states=states, transitions=transitions, initial='State1a')

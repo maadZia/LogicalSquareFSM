@@ -12,19 +12,23 @@ def generate_class_code(fsm):
 
     # 1. Definiowanie klasy bazowej State
     class_code += "class State:\n"
+    class_code += "    def __init__(self, state_id, assertion, name=None):\n"
+    class_code += "        self.state_id = state_id\n"
+    class_code += "        self.assertion = assertion\n"
+    class_code += "        self.name = name\n"
     class_code += "    def handle_event(self, context):\n"
     class_code += "        raise NotImplementedError('Subclasses must implement this method')\n\n\n"
 
     # 2. Generowanie klas dla aktualnych nierozwiniętych stanów
     for state_id, node in fsm.span_tree.items():
-        # Sprawdź, czy stan jest nierozwinięty (nie ma dzieci)
         if not node["children"]:
-            state_name = f"State{state_id}"
-            class_code += f"class {state_name}(State):\n"
+            state = node["state"]
+            class_code += f"class State{state_id}(State):\n"
+            class_code += f"    def __init__(self):\n"
+            class_code += f"        super().__init__(state_id='{state.state_id}', assertion='{state.assertion}', name='{state.name}')\n\n"
             class_code += f"    def handle_event(self, context):\n"
 
             # Dodajemy asercje dla stanu (jeśli istnieją)
-            state = node["state"]
             state_name_suffix = sanitize_name(state.name) if state and getattr(state, 'name', None) else None
             if state:
                 assertion = state.assert_state()
@@ -49,7 +53,7 @@ def generate_class_code(fsm):
                     class_code += f"            return\n"
                 class_code += f"        print('No valid transition for event')\n"
             else:
-                class_code += f"        print('No transitions defined for {state_name}')\n"
+                class_code += f"        print('No transitions defined for State{state_id}')\n"
             class_code += "\n\n"
 
     # 3. Generowanie klasy kontekstowej StateMachineContext

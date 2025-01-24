@@ -14,6 +14,9 @@ class MyStateMachineState(statemap.State):
     def Exit(self, fsm):
         pass
 
+    def cond(self, fsm):
+        self.Default(fsm)
+
     def Default(self, fsm):
         msg = "\n\tState: %s\n\tTransition: %s" % (
             fsm.getState().getName(), fsm.getTransition())
@@ -22,34 +25,31 @@ class MyStateMachineState(statemap.State):
 class MainMap_Default(MyStateMachineState):
     pass
 
+class MainMap_State1a(MainMap_Default):
+
+    def cond(self, fsm):
+        fsm.getState().Exit(fsm)
+        fsm.setState(MainMap.State1b)
+        fsm.getState().Entry(fsm)
+
+
 class MainMap_State1b(MainMap_Default):
     pass
 
 class MainMap_State1c(MainMap_Default):
     pass
 
-class MainMap_State2a(MainMap_Default):
-    pass
-
-class MainMap_State2b(MainMap_Default):
-    pass
-
-class MainMap_State2c(MainMap_Default):
-    pass
-
 class MainMap(object):
 
-    State1b = MainMap_State1b('MainMap.State1b', 0)
-    State1c = MainMap_State1c('MainMap.State1c', 1)
-    State2a = MainMap_State2a('MainMap.State2a', 2)
-    State2b = MainMap_State2b('MainMap.State2b', 3)
-    State2c = MainMap_State2c('MainMap.State2c', 4)
+    State1a = MainMap_State1a('MainMap.State1a', 0)
+    State1b = MainMap_State1b('MainMap.State1b', 1)
+    State1c = MainMap_State1c('MainMap.State1c', 2)
     Default = MainMap_Default('MainMap.Default', -1)
 
 class MyStateMachine_sm(statemap.FSMContext):
 
     def __init__(self, owner):
-        statemap.FSMContext.__init__(self, MainMap.State1b)
+        statemap.FSMContext.__init__(self, MainMap.State1a)
         self._owner = owner
 
     def __getattr__(self, attrib):

@@ -81,11 +81,12 @@ def draw_tree(graph_widget, edges, node_names=None):
             graph_widget.addItem(name_text)
 
 
-def draw_state_machine(graph_widget, transitions):
+def draw_state_machine(graph_widget, transitions, all_states):
     G = nx.DiGraph()
     for from_state, to_state, _ in transitions:
         G.add_edge(from_state, to_state)
 
+    # Ustal pozycje dla wszystkich wierzchołków
     is_planar, embedding = nx.check_planarity(G)
     positions = nx.planar_layout(G) if is_planar else nx.spring_layout(G)
 
@@ -153,8 +154,13 @@ def draw_state_machine(graph_widget, transitions):
             label.setPos(label_x, label_y)
             graph_widget.addItem(label)
 
+    # Rysuj same wierzchołki, nawet jeśli nie mają przejść
     node_radius = 20
-    for state, (x, y) in positions.items():
+    for state in all_states:
+        if state not in positions:
+            positions[state] = (np.random.uniform(-1, 1) * scale, np.random.uniform(-1, 1) * scale)
+
+        x, y = positions[state]
         graph_widget.plot(
             [x], [y], pen=None, symbol='o', symbolSize=node_radius * 2, symbolBrush='lightblue'
         )

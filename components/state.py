@@ -21,5 +21,5 @@ class State:
         Zwraca reprezentację stringową stanu.
         """
         if self.name:
-            return f"State {self.state_id}: {self.name}: {self.assertion}"
-        return f"State {self.state_id}: {self.assertion}"
+            return f"State {self.state_id}: {self.name}, Assertion: {self.assertion}"
+        return f"State {self.state_id}, Assertion: {self.assertion}"
