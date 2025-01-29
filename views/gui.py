@@ -6,6 +6,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setFixedSize(1200, 800)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("central_widget")
 
         font = QtGui.QFont("MS Shell Dlg 2", 9)
         MainWindow.setFont(font)
@@ -17,10 +18,13 @@ class Ui_MainWindow(object):
         font_12 = QtGui.QFont("MS Shell Dlg 2", 12)
         font_10 = QtGui.QFont("MS Shell Dlg 2", 10)
 
+        with open("views/styles.qss", "r") as f:
+            MainWindow.setStyleSheet(f.read())
+
         # main area
         self.main_widget = QtWidgets.QWidget(self.centralwidget)
         self.main_widget.setGeometry(QtCore.QRect(29, 129, 1141, 580))
-        # self.main_widget.setObjectName("main_widget")
+        self.main_widget.setObjectName("main_widget")
 
         # add square widget
         self.square = QtWidgets.QWidget(self.main_widget)
@@ -41,7 +45,7 @@ class Ui_MainWindow(object):
                          "If you leave any vertex empty it will be assigned the \'true\' value.")
 
         self.expandbox = QtWidgets.QComboBox(self.square)
-        self.expandbox.setGeometry(QtCore.QRect(340, 180, 111, 31))
+        self.expandbox.setGeometry(QtCore.QRect(335, 180, 111, 31))
         self.expandbox.setVisible(False)
 
         self.inputA = QtWidgets.QLineEdit(self.square)
@@ -85,9 +89,8 @@ class Ui_MainWindow(object):
         self.labelO.setText("O")
 
         self.add_square_button = QtWidgets.QPushButton(self.square)
-        self.add_square_button.setGeometry(QtCore.QRect(310, 450, 171, 41))
+        self.add_square_button.setGeometry(QtCore.QRect(305, 450, 171, 41))
         self.add_square_button.setFont(font)
-        self.add_square_button.setObjectName("add_self_button")
         self.add_square_button.setText("Add")
 
         # state tree widget
@@ -104,15 +107,13 @@ class Ui_MainWindow(object):
         self.statetree = GraphicsLayoutWidget(self.tree)
         self.statetree.setGeometry(QtCore.QRect(30, 70, 731, 411))
         self.statetree.setBackground('w')
-        self.statetree.setStyleSheet("""
-                    border: 1px solid black;  /* Cienka czarna ramka */
-                """)
+        self.statetree.setObjectName("graph")
         self.tree_plot = self.statetree.addPlot()
         self.tree_plot.hideAxis('left')
         self.tree_plot.hideAxis('bottom')
 
         self.name_button = QtWidgets.QPushButton(self.tree)
-        self.name_button.setGeometry(QtCore.QRect(305, 500, 187, 49))
+        self.name_button.setGeometry(QtCore.QRect(305, 500, 171, 41))
         self.name_button.setFont(font)
         self.name_button.setText("Set Names")
 
@@ -149,7 +150,7 @@ class Ui_MainWindow(object):
         self.name_input.setFont(font)
 
         self.change_name_button = QtWidgets.QPushButton(self.names)
-        self.change_name_button.setGeometry(QtCore.QRect(305, 500, 187, 49))
+        self.change_name_button.setGeometry(QtCore.QRect(305, 500, 171, 41))
         self.change_name_button.setFont(font)
         self.change_name_button.setText("Change Name")
 
@@ -164,19 +165,10 @@ class Ui_MainWindow(object):
         widget_title.setAlignment(QtCore.Qt.AlignCenter)
         widget_title.setText("Generate State Machine Code")
 
-        scrollbar_style = """
-            QScrollBar:vertical {border: none; background: transparent; width: 6px; margin: 0px 0px 0px 0px;}
-            QScrollBar::handle:vertical {background: #888; min-height: 20px; border-radius: 3px;}
-            QScrollBar::handle:vertical:hover {background: #555;}
-            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {height: 0px; width: 0px;}
-            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background: none;}
-        """
-
         self.smcode = QtWidgets.QTextEdit(self.code)
         self.smcode.setGeometry(QtCore.QRect(30, 70, 731, 411))
         self.smcode.setReadOnly(True)
         self.smcode.setFont(font_10)
-        self.smcode.setStyleSheet(scrollbar_style)
 
         # code generation buttons
         self.generate_buttons = QtWidgets.QWidget(self.code)
@@ -190,20 +182,24 @@ class Ui_MainWindow(object):
         self.class_button = QtWidgets.QPushButton(self.generate_buttons)
         self.class_button.setSizePolicy(sizePolicy)
         self.class_button.setText("Class Code")
+        self.class_button.setObjectName("class_button")
         buttons.addWidget(self.class_button)
 
         self.qt_button = QtWidgets.QPushButton(self.generate_buttons)
         self.qt_button.setSizePolicy(sizePolicy)
+        self.qt_button.setObjectName("qt_button")
         self.qt_button.setText("Qt Code")
         buttons.addWidget(self.qt_button)
 
         self.trans_button = QtWidgets.QPushButton(self.generate_buttons)
         self.trans_button.setSizePolicy(sizePolicy)
+        self.trans_button.setObjectName("trans_button")
         self.trans_button.setText("Transition Code")
         buttons.addWidget(self.trans_button)
 
         self.sml_button = QtWidgets.QPushButton(self.generate_buttons)
         self.sml_button.setSizePolicy(sizePolicy)
+        self.sml_button.setObjectName("sml_button")
         self.sml_button.setText("SML Code")
         buttons.addWidget(self.sml_button)
 
@@ -220,10 +216,8 @@ class Ui_MainWindow(object):
 
         self.sm_graph = GraphicsLayoutWidget(self.transitions)
         self.sm_graph.setGeometry(QtCore.QRect(30, 70, 731, 321))
+        self.sm_graph.setObjectName("graph")
         self.sm_graph.setBackground('w')
-        self.sm_graph.setStyleSheet("""
-                            border: 1px solid black;  /* Cienka czarna ramka */
-                        """)
         self.sm_plot = self.sm_graph.addPlot()
         self.sm_plot.hideAxis('left')
         self.sm_plot.hideAxis('bottom')
@@ -280,7 +274,6 @@ class Ui_MainWindow(object):
         self.assert_tree.setGeometry(QtCore.QRect(30, 70, 731, 411))
         self.assert_tree.setReadOnly(True)
         self.assert_tree.setFont(font_10)
-        self.assert_tree.setStyleSheet(scrollbar_style)
 
         # solver widget
         self.solver = QtWidgets.QWidget(self.main_widget)
@@ -297,7 +290,6 @@ class Ui_MainWindow(object):
         self.solver_feedback.setGeometry(QtCore.QRect(30, 70, 731, 321))
         self.solver_feedback.setReadOnly(True)
         self.solver_feedback.setFont(font_10)
-        self.solver_feedback.setStyleSheet(scrollbar_style)
 
         solverlabel = QtWidgets.QLabel(self.solver)
         solverlabel.setGeometry(QtCore.QRect(0, 380, 791, 111))
@@ -309,8 +301,9 @@ class Ui_MainWindow(object):
                             "no two states share a common truth assignment.")
 
         self.check_states_button = QtWidgets.QPushButton(self.solver)
-        self.check_states_button.setGeometry(QtCore.QRect(305, 500, 187, 49))
+        self.check_states_button.setGeometry(QtCore.QRect(305, 500, 171, 41))
         self.check_states_button.setFont(font)
+        self.check_states_button.setObjectName("check_states_button")
         self.check_states_button.setText("Check States")
 
 
@@ -318,9 +311,14 @@ class Ui_MainWindow(object):
 
 
         # menu buttons
+        # menu = QtWidgets.QWidget(self.centralwidget)
+        # menu.setGeometry(QtCore.QRect(0, 0, 1200, 120))
+        # menu.setObjectName("menu")
+
         self.buttonwidget = QtWidgets.QWidget(self.centralwidget)
-        self.buttonwidget.setGeometry(QtCore.QRect(30, 70, 1141, 51))
+        self.buttonwidget.setGeometry(QtCore.QRect(30, 50, 1141, 51))
         self.buttonwidget.setEnabled(False)
+        self.buttonwidget.setObjectName("buttons")
         buttons = QtWidgets.QHBoxLayout(self.buttonwidget)
         buttons.setContentsMargins(0, 0, 0, 0)
         buttons.setSpacing(30)
@@ -329,36 +327,43 @@ class Ui_MainWindow(object):
 
         self.tree_button = QtWidgets.QPushButton(self.buttonwidget)
         self.tree_button.setSizePolicy(sizePolicy)
+        self.tree_button.setObjectName("tree_button")
         self.tree_button.setText("State Tree")
         buttons.addWidget(self.tree_button)
 
         self.sm_button = QtWidgets.QPushButton(self.buttonwidget)
         self.sm_button.setSizePolicy(sizePolicy)
+        self.sm_button.setObjectName("sm_button")
         self.sm_button.setText("State Machine")
         buttons.addWidget(self.sm_button)
 
         self.assertions_button = QtWidgets.QPushButton(self.buttonwidget)
         self.assertions_button.setSizePolicy(sizePolicy)
+        self.assertions_button.setObjectName("assertions_button")
         self.assertions_button.setText("Assertions")
         buttons.addWidget(self.assertions_button)
 
         self.expand_button = QtWidgets.QPushButton(self.buttonwidget)
         self.expand_button.setSizePolicy(sizePolicy)
+        self.expand_button.setObjectName("expand_button")
         self.expand_button.setText("Expand State")
         buttons.addWidget(self.expand_button)
 
         self.solver_button = QtWidgets.QPushButton(self.buttonwidget)
         self.solver_button.setSizePolicy(sizePolicy)
-        self.solver_button.setText("Solvers")
+        self.solver_button.setObjectName("solver_button")
+        self.solver_button.setText("Solver")
         buttons.addWidget(self.solver_button)
 
         self.gen_button = QtWidgets.QPushButton(self.buttonwidget)
         self.gen_button.setSizePolicy(sizePolicy)
+        self.gen_button.setObjectName("gen_button")
         self.gen_button.setText("Generate Code")
         buttons.addWidget(self.gen_button)
 
         self.reset_button = QtWidgets.QPushButton(self.buttonwidget)
         self.reset_button.setSizePolicy(sizePolicy)
+        self.reset_button.setObjectName("reset_button")
         self.reset_button.setText("Reset")
         buttons.addWidget(self.reset_button)
 

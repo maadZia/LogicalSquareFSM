@@ -5,7 +5,6 @@
 %%
 
 State1a {
-    cond State1b {}
 }
 
 State1b {

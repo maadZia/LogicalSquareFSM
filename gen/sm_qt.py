@@ -10,7 +10,6 @@ State1c = QState()
 machine.addState(State1c)
 
 # Define transitions
-State1a.addTransition(State1b)
 
 # Set initial state
 machine.setInitialState(State1a)

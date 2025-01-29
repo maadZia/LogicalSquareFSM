@@ -14,9 +14,6 @@ class MyStateMachineState(statemap.State):
     def Exit(self, fsm):
         pass
 
-    def cond(self, fsm):
-        self.Default(fsm)
-
     def Default(self, fsm):
         msg = "\n\tState: %s\n\tTransition: %s" % (
             fsm.getState().getName(), fsm.getTransition())
@@ -26,12 +23,7 @@ class MainMap_Default(MyStateMachineState):
     pass
 
 class MainMap_State1a(MainMap_Default):
-
-    def cond(self, fsm):
-        fsm.getState().Exit(fsm)
-        fsm.setState(MainMap.State1b)
-        fsm.getState().Entry(fsm)
-
+    pass
 
 class MainMap_State1b(MainMap_Default):
     pass
