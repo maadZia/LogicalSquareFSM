@@ -352,7 +352,7 @@ class Ui_MainWindow(object):
         self.solver_button = QtWidgets.QPushButton(self.buttonwidget)
         self.solver_button.setSizePolicy(sizePolicy)
         self.solver_button.setObjectName("solver_button")
-        self.solver_button.setText("Solver")
+        self.solver_button.setText("Prover")
         buttons.addWidget(self.solver_button)
 
         self.gen_button = QtWidgets.QPushButton(self.buttonwidget)
