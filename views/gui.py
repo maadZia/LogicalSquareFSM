@@ -15,10 +15,12 @@ class Ui_MainWindow(object):
         font_14 = QtGui.QFont("MS Shell Dlg 2", 14)
         font_14.setBold(True)
         font_12 = QtGui.QFont("MS Shell Dlg 2", 12)
+        font_10 = QtGui.QFont("MS Shell Dlg 2", 10)
 
         # main area
         self.main_widget = QtWidgets.QWidget(self.centralwidget)
         self.main_widget.setGeometry(QtCore.QRect(29, 129, 1141, 580))
+        # self.main_widget.setObjectName("main_widget")
 
         # add square widget
         self.square = QtWidgets.QWidget(self.main_widget)
@@ -85,6 +87,7 @@ class Ui_MainWindow(object):
         self.add_square_button = QtWidgets.QPushButton(self.square)
         self.add_square_button.setGeometry(QtCore.QRect(310, 450, 171, 41))
         self.add_square_button.setFont(font)
+        self.add_square_button.setObjectName("add_self_button")
         self.add_square_button.setText("Add")
 
         # state tree widget
@@ -172,6 +175,7 @@ class Ui_MainWindow(object):
         self.smcode = QtWidgets.QTextEdit(self.code)
         self.smcode.setGeometry(QtCore.QRect(30, 70, 731, 411))
         self.smcode.setReadOnly(True)
+        self.smcode.setFont(font_10)
         self.smcode.setStyleSheet(scrollbar_style)
 
         # code generation buttons
@@ -215,7 +219,7 @@ class Ui_MainWindow(object):
         widget_title.setText("State Machine Diagram")
 
         self.sm_graph = GraphicsLayoutWidget(self.transitions)
-        self.sm_graph.setGeometry(QtCore.QRect(30, 70, 731, 311))
+        self.sm_graph.setGeometry(QtCore.QRect(30, 70, 731, 321))
         self.sm_graph.setBackground('w')
         self.sm_graph.setStyleSheet("""
                             border: 1px solid black;  /* Cienka czarna ramka */
@@ -225,7 +229,7 @@ class Ui_MainWindow(object):
         self.sm_plot.hideAxis('bottom')
 
         translabel = QtWidgets.QLabel(self.transitions)
-        translabel.setGeometry(QtCore.QRect(0, 380, 791, 101))
+        translabel.setGeometry(QtCore.QRect(0, 380, 791, 111))
         translabel.setFont(font_12)
         translabel.setAlignment(QtCore.Qt.AlignCenter)
         translabel.setWordWrap(True)
@@ -275,7 +279,41 @@ class Ui_MainWindow(object):
         self.assert_tree = QtWidgets.QTextEdit(self.assertions)
         self.assert_tree.setGeometry(QtCore.QRect(30, 70, 731, 411))
         self.assert_tree.setReadOnly(True)
+        self.assert_tree.setFont(font_10)
         self.assert_tree.setStyleSheet(scrollbar_style)
+
+        # solver widget
+        self.solver = QtWidgets.QWidget(self.main_widget)
+        self.solver.setGeometry(QtCore.QRect(175, 20, 790, 560))
+        self.solver.setVisible(False)
+
+        widget_title = QtWidgets.QLabel(self.solver)
+        widget_title.setGeometry(QtCore.QRect(0, 0, 791, 81))
+        widget_title.setFont(font_16)
+        widget_title.setAlignment(QtCore.Qt.AlignCenter)
+        widget_title.setText("Logical Disjointness Verification")
+
+        self.solver_feedback = QtWidgets.QTextEdit(self.solver)
+        self.solver_feedback.setGeometry(QtCore.QRect(30, 70, 731, 321))
+        self.solver_feedback.setReadOnly(True)
+        self.solver_feedback.setFont(font_10)
+        self.solver_feedback.setStyleSheet(scrollbar_style)
+
+        solverlabel = QtWidgets.QLabel(self.solver)
+        solverlabel.setGeometry(QtCore.QRect(0, 380, 791, 111))
+        solverlabel.setFont(font_12)
+        solverlabel.setAlignment(QtCore.Qt.AlignCenter)
+        solverlabel.setWordWrap(True)
+        solverlabel.setText("Here you can check whether all pairs of states "
+                            "in the FSM are logically disjoint, meaning that "
+                            "no two states share a common truth assignment.")
+
+        self.check_states_button = QtWidgets.QPushButton(self.solver)
+        self.check_states_button.setGeometry(QtCore.QRect(305, 500, 187, 49))
+        self.check_states_button.setFont(font)
+        self.check_states_button.setText("Check States")
+
+
 
 
 

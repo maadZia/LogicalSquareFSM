@@ -9,19 +9,13 @@ class State:
 
 class State1a(State):
     def __init__(self):
-        super().__init__(state_id='1a', assertion='(a and d)', name='test')
+        super().__init__(state_id='1a', assertion='(a and d)', name='None')
 
     def handle_event(self, context):
         # Assertion logic
-        print('State1a: Test: handling event (a and d)')
+        print('State1a: handling event (a and d)')
 
-        # Transition logic
-        event = context.event
-        if event == 'cond':
-            print('Transitioning to State1b')
-            context.set_state(State1b())
-            return
-        print('No valid transition for event')
+        print('No transitions defined for State1a')
 
 
 class State1b(State):

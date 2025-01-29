@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWidget, QPushButton
+from PyQt5.QtWidgets import QWidget
 
-from guinew import Ui_MainWindow
+from views.gui import Ui_MainWindow
 from components.fsm import LogicalSquareFSM
 from components import graph_gen as gg
 
@@ -30,6 +30,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.name_button.clicked.connect(self.show_name_widget)
         self.ui.namebox.currentTextChanged.connect(self.update_assertion)
         self.ui.change_name_button.clicked.connect(self.add_name)
+        self.ui.check_states_button.clicked.connect(self.check_states)
 
         self.ui.ifinput.returnPressed.connect(self.add_transition)
         self.ui.frombox.currentIndexChanged.connect(self.update_state_box)
@@ -38,6 +39,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.sm_button.clicked.connect(self.show_sm_widget)
         self.ui.assertions_button.clicked.connect(self.show_assertions_widget)
         self.ui.expand_button.clicked.connect(self.show_square_widget)
+        self.ui.solver_button.clicked.connect(self.show_solver_widget)
         self.ui.gen_button.clicked.connect(self.show_code_widget)
 
         self.gen_buttons = [self.ui.class_button, self.ui.trans_button, self.ui.qt_button, self.ui.sml_button]
@@ -49,18 +51,18 @@ class MainWindowController(QtWidgets.QMainWindow):
     def move_focus(self, next_widget):
         next_widget.setFocus()
 
-    def show_tree_widget(self):
+    def hide_widgets(self, active_widget):
         for widget in self.ui.main_widget.children():
-            if isinstance(widget, QWidget) and widget != self.ui.tree:
+            if isinstance(widget, QWidget) and widget != active_widget:
                 widget.setVisible(False)
-        self.ui.tree.setVisible(True)
+        active_widget.setVisible(True)
+
+    def show_tree_widget(self):
+        self.hide_widgets(self.ui.tree)
         self.display_tree_graph()
 
     def show_name_widget(self):
-        for widget in self.ui.main_widget.children():
-            if isinstance(widget, QWidget) and widget != self.ui.names:
-                widget.setVisible(False)
-        self.ui.names.setVisible(True)
+        self.hide_widgets(self.ui.names)
         all_state_ids = [state_id for state_id in self.fsm.span_tree.keys()
                          if state_id not in self.expanded_states]
         self.fill_states_box(all_state_ids, self.ui.namebox)
@@ -73,44 +75,37 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.assertlabel.setText(f"State Assertion: {assertion}")
 
     def show_sm_widget(self):
-        for widget in self.ui.main_widget.children():
-            if isinstance(widget, QWidget) and widget != self.ui.transitions:
-                widget.setVisible(False)
-        self.ui.transitions.setVisible(True)
+        self.hide_widgets(self.ui.transitions)
         self.ui.frombox.clear()
         for state_id in self.fsm.span_tree.keys():
             if state_id not in self.expanded_states:
                 self.ui.frombox.addItem(str(state_id))
-        all_states = [state for state in self.fsm.span_tree.keys() if state != 0]
+        all_states = [state for state in self.fsm.span_tree.keys()
+                      if state not in self.expanded_states]
         transitions = [(t[0], t[1], t[2]) for t in self.fsm.transitions]
         gg.draw_state_machine(self.ui.sm_plot, transitions, all_states)
 
     def show_assertions_widget(self):
-        for widget in self.ui.main_widget.children():
-            if isinstance(widget, QWidget) and widget != self.ui.assertions:
-                widget.setVisible(False)
-        self.ui.assertions.setVisible(True)
+        self.hide_widgets(self.ui.assertions)
         tree_str = self.fsm.display_tree()
         self.ui.assert_tree.clear()
         self.ui.assert_tree.append(tree_str)
 
     def show_square_widget(self):
         self.fill_states_box(self.fsm.latest_states, self.ui.expandbox)
-        for widget in self.ui.main_widget.children():
-            if isinstance(widget, QWidget) and widget != self.ui.square:
-                widget.setVisible(False)
-        self.ui.square.setVisible(True)
+        self.hide_widgets(self.ui.square)
 
     def show_solver_widget(self):
-        return
+        self.hide_widgets(self.ui.solver)
+        self.ui.solver_feedback.setText("<span style ='color: gray;'>Click on 'Check States' "
+                                        "button to verify states.<br>"
+                                        "Your feedback will appear here...</span>")
 
     def show_code_widget(self):
-        for widget in self.ui.main_widget.children():
-            if isinstance(widget, QWidget) and widget != self.ui.code:
-                widget.setVisible(False)
-        self.ui.code.setVisible(True)
-        self.ui.smcode.setText("Choose code generation method from options below.\n"
-                               "Your state machine code will appear here...")
+        self.hide_widgets(self.ui.code)
+        self.ui.smcode.setText("<span style='color: gray;'>Choose code generation "
+                               "method from options below.<br>"
+                               "Your state machine code will appear here...</span>")
 
         for button in self.gen_buttons:
             button.setEnabled(True)
@@ -172,7 +167,8 @@ class MainWindowController(QtWidgets.QMainWindow):
             widget.setGeometry(geometry.x(), geometry.y() + 50, geometry.width(), geometry.height())
         self.ui.addsquare.setText("Expand States")
         self.ui.addlabel.setText("Choose a state to expand from box below and "
-                                 "replace it with a new logical square.")
+                                 "replace it with a new logical square. You can "
+                                 "only expand the most recent states.")
 
     def fill_states_box(self, item_list, combo_box):
         combo_box.clear()
@@ -222,6 +218,10 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.fsm.transitions = [transition for transition in self.fsm.transitions
                                 if transition[0] != state_id and transition[1] != state_id]
 
+    def check_states(self):
+        # solver action
+        return
+
     def show_sm_code(self):
         sender = self.sender()
 
@@ -265,11 +265,3 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.__init__()
         self.show()
 
-
-if __name__ == "__main__":
-    import sys
-
-    app = QtWidgets.QApplication(sys.argv)
-    mainWindow = MainWindowController()
-    mainWindow.show()
-    sys.exit(app.exec_())
