@@ -46,7 +46,7 @@ def check_states_disjoint(states):
             solver.add(And(parsed_states[i], parsed_states[j]))
 
             if solver.check() == unsat:
-                feedback += f"✅ Stany {i + 1} i {j + 1} są rozłączne!\n"
+                feedback += f"✔️ Stany {i + 1} i {j + 1} są rozłączne!\n"
             else:
                 feedback += f"❌ Stany {i + 1} i {j + 1} NIE są rozłączne! Przykładowe wartości:\n"
                 feedback += str(solver.model()) + "\n"
