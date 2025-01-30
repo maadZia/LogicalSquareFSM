@@ -76,7 +76,7 @@ To create a state machine, the user:
 3. Creates transitions between states
 4. Generates source code
 
-## :sparkles: Planned Future Features 
+## :sparkles: Planned Future Enhancements
 - Expanding support for different programming languages in generated code
 - Optimizing the user interface
 - Enhancing AI capabilities for state analysis
