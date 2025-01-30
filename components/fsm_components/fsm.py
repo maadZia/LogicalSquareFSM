@@ -1,10 +1,8 @@
-from components.state import State
+from components.fsm_components.state import State
 from string import ascii_lowercase
-import networkx as nx
-from components.code_generator import (
+from components.fsm_components.code_generator import (
     generate_class_code,
     generate_sml,
-    compile_sml_to_python,
     generate_transition_code,
     generate_qt_code,
     generate_assertion_code,

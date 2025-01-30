@@ -24,7 +24,6 @@ class Ui_MainWindow(object):
         # main area
         self.main_widget = QtWidgets.QWidget(self.centralwidget)
         self.main_widget.setGeometry(QtCore.QRect(29, 129, 1141, 580))
-        self.main_widget.setObjectName("main_widget")
 
         # add square widget
         self.square = QtWidgets.QWidget(self.main_widget)
@@ -286,8 +285,12 @@ class Ui_MainWindow(object):
         widget_title.setAlignment(QtCore.Qt.AlignCenter)
         widget_title.setText("Logical Disjointness Verification")
 
+        self.solver_input = QtWidgets.QTextEdit(self.solver)
+        self.solver_input.setGeometry(QtCore.QRect(30, 70, 731, 150))
+        self.solver_input.setFont(font_10)
+
         self.solver_feedback = QtWidgets.QTextEdit(self.solver)
-        self.solver_feedback.setGeometry(QtCore.QRect(30, 70, 731, 321))
+        self.solver_feedback.setGeometry(QtCore.QRect(30, 240, 731, 150))
         self.solver_feedback.setReadOnly(True)
         self.solver_feedback.setFont(font_10)
 
@@ -296,8 +299,8 @@ class Ui_MainWindow(object):
         solverlabel.setFont(font_12)
         solverlabel.setAlignment(QtCore.Qt.AlignCenter)
         solverlabel.setWordWrap(True)
-        solverlabel.setText("Here you can check whether all pairs of states "
-                            "in the FSM are logically disjoint, meaning that "
+        solverlabel.setText("Here you can check whether all pairs of given "
+                            "states are logically disjoint, meaning that "
                             "no two states share a common truth assignment.")
 
         self.check_states_button = QtWidgets.QPushButton(self.solver)
@@ -306,22 +309,61 @@ class Ui_MainWindow(object):
         self.check_states_button.setObjectName("check_states_button")
         self.check_states_button.setText("Check States")
 
+        # ai widget
+        self.ai = QtWidgets.QWidget(self.main_widget)
+        self.ai.setGeometry(QtCore.QRect(175, 20, 790, 560))
+        self.ai.setVisible(False)
+
+        widget_title = QtWidgets.QLabel(self.ai)
+        widget_title.setGeometry(QtCore.QRect(0, 0, 791, 81))
+        widget_title.setFont(font_16)
+        widget_title.setAlignment(QtCore.Qt.AlignCenter)
+        widget_title.setText("LLM Chat")
+
+        self.ai.ai_feedback = QtWidgets.QTextEdit(self.ai)
+        self.ai.ai_feedback.setGeometry(QtCore.QRect(30, 70, 731, 150))
+        self.ai.ai_feedback.setReadOnly(True)
+        self.ai.ai_feedback.setFont(font_10)
+
+        ailabel = QtWidgets.QLabel(self.ai)
+        ailabel.setGeometry(QtCore.QRect(0, 210, 791, 111))
+        ailabel.setFont(font_12)
+        ailabel.setAlignment(QtCore.Qt.AlignCenter)
+        ailabel.setWordWrap(True)
+        ailabel.setText("Here you can ask LLM to help you complete logical squares. "
+                        "Give it a domain name and selected square corners and it will try "
+                        "to generate remaining vertices.")
+
+        self.ai.ai_input = QtWidgets.QTextEdit(self.ai)
+        self.ai.ai_input.setGeometry(QtCore.QRect(30, 310, 731, 80))
+        self.ai.ai_input.setFont(font_10)
+
+        ailabel = QtWidgets.QLabel(self.ai)
+        ailabel.setGeometry(QtCore.QRect(0, 380, 791, 111))
+        ailabel.setFont(font_12)
+        ailabel.setAlignment(QtCore.Qt.AlignCenter)
+        ailabel.setWordWrap(True)
+        ailabel.setText("Example input can look like this:\n"
+                        "Airport traffic management system, A=taxiing")
+
+        self.send_request_button = QtWidgets.QPushButton(self.ai)
+        self.send_request_button.setGeometry(QtCore.QRect(305, 500, 171, 41))
+        self.send_request_button.setFont(font)
+        self.send_request_button.setText("Send Request")
+
 
 
 
 
         # menu buttons
-        # menu = QtWidgets.QWidget(self.centralwidget)
-        # menu.setGeometry(QtCore.QRect(0, 0, 1200, 120))
-        # menu.setObjectName("menu")
 
         self.buttonwidget = QtWidgets.QWidget(self.centralwidget)
         self.buttonwidget.setGeometry(QtCore.QRect(30, 50, 1141, 51))
-        self.buttonwidget.setEnabled(False)
+        # self.buttonwidget.setEnabled(False)
         self.buttonwidget.setObjectName("buttons")
         buttons = QtWidgets.QHBoxLayout(self.buttonwidget)
         buttons.setContentsMargins(0, 0, 0, 0)
-        buttons.setSpacing(30)
+        buttons.setSpacing(20)
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
 
@@ -329,36 +371,47 @@ class Ui_MainWindow(object):
         self.tree_button.setSizePolicy(sizePolicy)
         self.tree_button.setObjectName("tree_button")
         self.tree_button.setText("State Tree")
+        self.tree_button.setVisible(False)
         buttons.addWidget(self.tree_button)
 
         self.sm_button = QtWidgets.QPushButton(self.buttonwidget)
         self.sm_button.setSizePolicy(sizePolicy)
         self.sm_button.setObjectName("sm_button")
         self.sm_button.setText("State Machine")
+        self.sm_button.setVisible(False)
         buttons.addWidget(self.sm_button)
 
         self.assertions_button = QtWidgets.QPushButton(self.buttonwidget)
         self.assertions_button.setSizePolicy(sizePolicy)
         self.assertions_button.setObjectName("assertions_button")
         self.assertions_button.setText("Assertions")
+        self.assertions_button.setVisible(False)
         buttons.addWidget(self.assertions_button)
 
         self.expand_button = QtWidgets.QPushButton(self.buttonwidget)
         self.expand_button.setSizePolicy(sizePolicy)
         self.expand_button.setObjectName("expand_button")
         self.expand_button.setText("Expand State")
+        self.expand_button.setVisible(False)
         buttons.addWidget(self.expand_button)
+
+        self.ai_button = QtWidgets.QPushButton(self.buttonwidget)
+        self.ai_button.setSizePolicy(sizePolicy)
+        self.ai_button.setObjectName("ai_button")
+        self.ai_button.setText("LLM Chat")
+        buttons.addWidget(self.ai_button)
 
         self.solver_button = QtWidgets.QPushButton(self.buttonwidget)
         self.solver_button.setSizePolicy(sizePolicy)
         self.solver_button.setObjectName("solver_button")
-        self.solver_button.setText("Prover")
+        self.solver_button.setText("Solver")
         buttons.addWidget(self.solver_button)
 
         self.gen_button = QtWidgets.QPushButton(self.buttonwidget)
         self.gen_button.setSizePolicy(sizePolicy)
         self.gen_button.setObjectName("gen_button")
         self.gen_button.setText("Generate Code")
+        self.gen_button.setVisible(False)
         buttons.addWidget(self.gen_button)
 
         self.reset_button = QtWidgets.QPushButton(self.buttonwidget)

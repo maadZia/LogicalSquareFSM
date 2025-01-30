@@ -22,6 +22,10 @@ QLineEdit {
     padding: 4px;
 }
 
+QTextEdit {
+    color: black;
+}
+
 QComboBox {
     background-color: white;
     border: 1px solid gray;
@@ -60,38 +64,38 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
 
 
-QPushButton#tree_button, #reset_button {
+QPushButton#tree_button, #ai_button {
     background-color: #e0f4d4;
     font-weight: bold;
 }
-QPushButton#tree_button:hover, #reset_button:hover {
+QPushButton#tree_button:hover, #ai_button:hover {
     background-color: #d6ebca;
 }
 
 
-QPushButton#sm_button, #gen_button {
+QPushButton#sm_button, #solver_button {
     background-color: #cfedc0;
     font-weight: bold;
 }
-QPushButton#sm_button:hover, #gen_button:hover {
+QPushButton#sm_button:hover, #solver_button:hover {
     background-color: #c0dbb2;
 }
 
 
-QPushButton#assertions_button, #solver_button {
+QPushButton#assertions_button, #gen_button {
     background-color: #b2d6a1;
     font-weight: bold;
 }
-QPushButton#assertions_button:hover, #solver_button:hover {
+QPushButton#assertions_button:hover, #gen_button:hover {
     background-color: #9dbd8e;
 }
 
 
-QPushButton#expand_button {
+QPushButton#expand_button, #reset_button {
     background-color: #a1c8a1;
     font-weight: bold;
 }
-QPushButton#expand_button:hover, #class_button:hover, #trans_button:hover {
+QPushButton#expand_button:hover, #reset_button:hover, #class_button:hover, #trans_button:hover {
     background-color: #91b591;
 }
 

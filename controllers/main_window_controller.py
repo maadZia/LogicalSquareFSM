@@ -2,8 +2,10 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QWidget
 
 from views.gui import Ui_MainWindow
-from components.fsm import LogicalSquareFSM
-from components import graph_gen as gg
+from components.fsm_components.fsm import LogicalSquareFSM
+from components.fsm_components import graph_gen as gg
+from components import ai_module as aim
+from components import solver
 
 
 class MainWindowController(QtWidgets.QMainWindow):
@@ -30,6 +32,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.name_button.clicked.connect(self.show_name_widget)
         self.ui.namebox.currentTextChanged.connect(self.update_assertion)
         self.ui.change_name_button.clicked.connect(self.add_name)
+        self.ui.send_request_button.clicked.connect(self.sent_request)
         self.ui.check_states_button.clicked.connect(self.check_states)
 
         self.ui.ifinput.returnPressed.connect(self.add_transition)
@@ -39,6 +42,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.sm_button.clicked.connect(self.show_sm_widget)
         self.ui.assertions_button.clicked.connect(self.show_assertions_widget)
         self.ui.expand_button.clicked.connect(self.show_square_widget)
+        self.ui.ai_button.clicked.connect(self.show_ai_widget)
         self.ui.solver_button.clicked.connect(self.show_solver_widget)
         self.ui.gen_button.clicked.connect(self.show_code_widget)
 
@@ -69,10 +73,13 @@ class MainWindowController(QtWidgets.QMainWindow):
 
     def update_assertion(self):
         state_id = self.ui.namebox.currentText()
-        node = self.fsm.span_tree[state_id]
-        state = node["state"]
-        assertion = state.assert_state()
-        self.ui.assertlabel.setText(f"State Assertion: {assertion}")
+        try:
+            node = self.fsm.span_tree[state_id]
+            state = node["state"]
+            assertion = state.assert_state()
+            self.ui.assertlabel.setText(f"State Assertion: {assertion}")
+        except KeyError:
+            pass
 
     def show_sm_widget(self):
         self.hide_widgets(self.ui.transitions)
@@ -95,10 +102,22 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.fill_states_box(self.fsm.latest_states, self.ui.expandbox)
         self.hide_widgets(self.ui.square)
 
+    def show_ai_widget(self):
+        self.hide_widgets(self.ui.ai)
+        self.ui.ai.ai_input.clear()
+        self.ui.ai.ai_feedback.setText(
+            "<span style='color: gray;'>LLM's feedback will appear here...<br>"
+            "Remember the model only answers questions related to building logical squares.</span>"
+        )
+
     def show_solver_widget(self):
         self.hide_widgets(self.ui.solver)
-        self.ui.solver_feedback.setText("<span style ='color: gray;'>Click on 'Check States' "
-                                        "button to verify states.<br>"
+        self.ui.solver_input.clear()
+        self.ui.solver_feedback.setText("<span style ='color: gray;'>Note that every new line is considered"
+                                        " a new state. Example input can look like this:<br>"
+                                        "taxing = true, immobilising = false<br>"
+                                        "immobilising = true, engine_stopped = true<br><br>"
+                                        "Click on 'Check States' button to verify states."
                                         "Your feedback will appear here...</span>")
 
     def show_code_widget(self):
@@ -152,7 +171,10 @@ class MainWindowController(QtWidgets.QMainWindow):
                 input.clear()
 
             self.show_tree_widget()
-            self.ui.buttonwidget.setEnabled(True)
+            for button in [self.ui.tree_button, self.ui.sm_button, self.ui.assertions_button,
+                           self.ui.expand_button, self.ui.gen_button]:
+                button.setVisible(True)
+            # self.ui.buttonwidget.setEnabled(True)
             if not self.expanded:
                 self.expanded = True
                 self.create_expand_widget()
@@ -218,9 +240,16 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.fsm.transitions = [transition for transition in self.fsm.transitions
                                 if transition[0] != state_id and transition[1] != state_id]
 
+    def sent_request(self):
+        prompt = self.ui.ai.ai_input.toPlainText()
+        response = aim.generate_text(prompt)
+        self.ui.ai.ai_feedback.setText(response)
+
     def check_states(self):
-        # solver action
-        return
+        solver_input = self.ui.solver_input.toPlainText()
+        states = solver_input.splitlines()
+        feedback = solver.check_states_disjoint(states)
+        self.ui.solver_feedback.setText(feedback)
 
     def show_sm_code(self):
         sender = self.sender()
