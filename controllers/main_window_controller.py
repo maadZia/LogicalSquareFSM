@@ -38,6 +38,7 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.ifinput.returnPressed.connect(self.add_transition)
         self.ui.frombox.currentIndexChanged.connect(self.update_state_box)
 
+        self.ui.square_button.clicked.connect(self.show_square_widget)
         self.ui.tree_button.clicked.connect(self.show_tree_widget)
         self.ui.sm_button.clicked.connect(self.show_sm_widget)
         self.ui.assertions_button.clicked.connect(self.show_assertions_widget)
@@ -174,7 +175,7 @@ class MainWindowController(QtWidgets.QMainWindow):
             for button in [self.ui.tree_button, self.ui.sm_button, self.ui.assertions_button,
                            self.ui.expand_button, self.ui.gen_button]:
                 button.setVisible(True)
-            # self.ui.buttonwidget.setEnabled(True)
+            self.ui.square_button.setVisible(False)
             if not self.expanded:
                 self.expanded = True
                 self.create_expand_widget()

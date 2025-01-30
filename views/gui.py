@@ -367,6 +367,12 @@ class Ui_MainWindow(object):
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
 
+        self.square_button = QtWidgets.QPushButton(self.buttonwidget)
+        self.square_button.setSizePolicy(sizePolicy)
+        self.square_button.setObjectName("square_button")
+        self.square_button.setText("Add Square")
+        buttons.addWidget(self.square_button)
+
         self.tree_button = QtWidgets.QPushButton(self.buttonwidget)
         self.tree_button.setSizePolicy(sizePolicy)
         self.tree_button.setObjectName("tree_button")

@@ -82,11 +82,11 @@ QPushButton#sm_button:hover, #solver_button:hover {
 }
 
 
-QPushButton#assertions_button, #gen_button {
+QPushButton#square_button, #assertions_button, #gen_button {
     background-color: #b2d6a1;
     font-weight: bold;
 }
-QPushButton#assertions_button:hover, #gen_button:hover {
+QPushButton#square_button:hover, #assertions_button:hover, #gen_button:hover {
     background-color: #9dbd8e;
 }
 

@@ -1,6 +1,4 @@
 import subprocess
-
-from graphviz import Source
 import re
 
 
@@ -218,32 +216,3 @@ def generate_qt_code(fsm):
     code += "print('Qt State Machine initialized and running')\n"
 
     return code
-
-
-def export_to_dot(fsm, filename="gen/fsm_tree.dot"):
-    # Eksport do pliku DOT
-    with open(filename, "w") as f:
-        f.write("digraph FSM {\n")
-        f.write("    rankdir=TB;\n")  # Układ drzewa (od góry do dołu)
-
-        for state_id, node in fsm.span_tree.items():
-            state_label = str(node["state"])
-            f.write(f'    {state_id} [label="{state_label}"];\n')
-            for child_id in node["children"]:
-                f.write(f'    {state_id} -> {child_id};\n')
-
-        f.write("}\n")
-    print(f"Drzewo stanów zapisane do pliku {filename}.")
-
-    # Konwersja pliku DOT na PNG za pomocą graphviz
-    try:
-        # Tworzenie obiektu Source, który obsługuje generowanie obrazu
-        source = Source.from_file(filename)
-
-        # Wskazanie formatu i ścieżki zapisu obrazu PNG
-        png_filename = filename.replace(".dot", ".png")
-        source.render(png_filename, format="png", cleanup=True)
-
-        print(f"Obrazek PNG zapisany jako {png_filename}.")
-    except Exception as e:
-        print(f"Błąd podczas konwersji pliku DOT na PNG: {e}")
